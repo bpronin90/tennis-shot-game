@@ -12,7 +12,7 @@ npm ci
 npm run dev
 ```
 
-The development server uses port 5173 by default. The application needs no credentials, backend, or external APIs. After installation, gameplay makes no external requests.
+The development server listens on `localhost:5173` only. To test from a phone or another device on your network, opt in with `npm run dev -- --host` (or `npm run preview -- --host`). This exposes the dev server to that network. The application needs no credentials, backend, or external APIs. After installation, gameplay makes no external requests.
 
 ```sh
 npm test          # deterministic simulation tests
