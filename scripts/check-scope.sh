@@ -73,7 +73,8 @@ if [[ -z "$base" ]]; then
     die "cannot infer a base ref; pass --base <ref>"
   fi
 fi
-git rev-parse --verify "$base" >/dev/null 2>&1 || die "unknown base ref: $base"
+git rev-parse --verify --quiet "$base^{commit}" >/dev/null || die "base is not a valid commit: $base"
+git merge-base "$base" HEAD >/dev/null 2>&1 || die "no merge base between $base and HEAD"
 
 normalize() {
   local path="$1"
@@ -93,14 +94,18 @@ done < <(
   done
 )
 
+# Capture each Git enumeration at top level so a failure is fatal; errors inside
+# process substitution would otherwise be silently ignored.
+committed="$(git diff --name-only "$base...HEAD")" || die "git diff against base failed: $base"
+staged="$(git diff --cached --name-only)" || die "git diff --cached failed"
+unstaged="$(git diff --name-only)" || die "git diff failed"
+untracked="$(git ls-files --others --exclude-standard)" || die "git ls-files failed"
+
 declare -a patch_changed=()
 while IFS= read -r path; do
   [[ -n "$path" ]] && patch_changed+=("$path")
 done < <(
-  {
-    git diff --name-only "$base...HEAD"
-    git diff --cached --name-only
-  } | sed '/^$/d' | sort -u
+  printf '%s\n' "$committed" "$staged" | sed '/^$/d' | sort -u
 )
 
 declare -a worktree_only=()
@@ -115,10 +120,7 @@ while IFS= read -r path; do
   done
   [[ "$skip" == true ]] || worktree_only+=("$path")
 done < <(
-  {
-    git diff --name-only
-    git ls-files --others --exclude-standard
-  } | sed '/^$/d' | sort -u
+  printf '%s\n' "$unstaged" "$untracked" | sed '/^$/d' | sort -u
 )
 
 echo "Base: $base"

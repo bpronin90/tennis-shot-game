@@ -51,11 +51,18 @@ def short_flags(args):
 
 
 def check_git(args, workdir):
-    # Global options before the subcommand: -C <dir>, -c <k=v>.
-    while args and args[0] in ("-C", "-c"):
-        if args[0] == "-C" and len(args) > 1:
-            workdir = os.path.join(workdir, os.path.expanduser(args[1]))
-        args = args[2:]
+    # Global options before the subcommand: -C <dir>, -C<dir>, -c <k=v>, -c<k=v>,
+    # and other flag-style options (e.g. --no-pager, --git-dir=<path>).
+    while args and args[0].startswith("-"):
+        opt = args[0]
+        if opt in ("-C", "-c"):
+            if opt == "-C" and len(args) > 1:
+                workdir = os.path.join(workdir, os.path.expanduser(args[1]))
+            args = args[2:]
+            continue
+        if opt.startswith("-C"):
+            workdir = os.path.join(workdir, os.path.expanduser(opt[2:]))
+        args = args[1:]
     if not args:
         return
     sub, rest = args[0], args[1:]
