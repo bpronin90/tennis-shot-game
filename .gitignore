@@ -17,3 +17,18 @@ __pycache__/
 .DS_Store
 .vscode/
 .idea/
+
+# Local-only agent instruction files (restored from the private local layer;
+# contributor-facing rules live in CONTRIBUTING.md)
+/AGENTS.md
+/CLAUDE.md
+/CODEX.md
+/GEMINI.md
+
+# Local-only agent workflow tooling
+/.claude/
+/.codex/
+/.agents/
+/.agent-workflows/
+/scripts/check-scope.sh
+/scripts/test-governance-helpers.sh
