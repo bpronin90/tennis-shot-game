@@ -49,7 +49,7 @@ implementation authorization.
   browser. Start `npm run dev`, then run `python3 tests/browser_smoke.py [url] [artifact-dir]`
   or drive it with Playwright. Check desktop and phone widths. Green unit tests do not
   prove visual correctness.
-- There is no CI. The handoff lists the commands run at the exact head; reviewers rerun them only to resolve doubt.
+- Pull requests run `.github/workflows/ci.yml`. The handoff reports local and CI results at the exact head.
 - Test failure modes, not only happy paths.
 - Report exactly which checks ran and which did not. Never describe unexecuted
   integration, deployment, or live/native validation as proven.
@@ -114,7 +114,7 @@ Ambiguous approval such as "looks good" is not authorization.
 | --- | --- |
 | Broad staging; commit or push to `main`; force push; `reset --hard`, `clean -f`; `gh pr merge` | `.claude/hooks/guard-bash.py` (Claude Code only; a guardrail, not a security boundary) |
 | Allowed Files | `scripts/check-scope.sh`, run by the agent |
-| Tests | No CI. Local commands only, reported in the handoff |
+| Tests | GitHub Actions CI plus local commands, reported in the handoff |
 | Everything else, including review independence, handoff format, and all agents other than Claude Code | Instructions only |
 
 Branch protection is not configured on `main` (checked 2026-10-30), so nothing server-side blocks a direct push or a merge.
