@@ -98,6 +98,20 @@ def check_git(args, workdir):
         block(f"`git {sub} .` discards uncommitted work across the tree; name explicit paths")
 
 
+def is_admin_merge(toks):
+    """`gh ... pr merge ... --admin`, allowing `env`, global flags, and a path to gh."""
+    if toks and toks[0] == "env":
+        toks = toks[1:]
+        while toks and re.match(r"^[A-Za-z_][A-Za-z0-9_]*=|^-", toks[0]):
+            toks = toks[1:]  # env's own options and VAR=value arguments
+    if not toks or os.path.basename(toks[0]) != "gh":
+        return False
+    rest = toks[1:]
+    if "pr" not in rest or "merge" not in rest[rest.index("pr") + 1:]:
+        return False
+    return any(t == "--admin" or t.startswith("--admin=") for t in rest)
+
+
 workdir = cwd
 for seg in re.split(r"&&|\|\||;|\||\n", cmd):
     toks = tokens(seg.strip())
@@ -107,9 +121,7 @@ for seg in re.split(r"&&|\|\||;|\||\n", cmd):
         workdir = os.path.join(workdir, os.path.expanduser(toks[1]))
     elif toks[0] == "git":
         check_git(toks[1:], workdir)
-    elif toks[0] == "gh" and toks[1:3] == ["pr", "merge"] and any(
-        t == "--admin" or t.startswith("--admin=") for t in toks[3:]
-    ):
+    elif is_admin_merge(toks):
         block("`gh pr merge --admin` bypasses checks and is owner-only; merge without it once the merge conditions hold")
 
 sys.exit(0)

@@ -47,7 +47,7 @@ If you are unsure whether work is substantive, treat it as substantive.
 - Review findings cite `file:line` and a concrete failing input or state, and separate
   blocking defects from optional suggestions. A new commit makes earlier reviews stale.
 - An agent may merge a PR only when CI passes on the exact head; for substantive changes,
-  an independent reviewer who is not the head's author has posted `VERDICT=APPROVE` on
+  an independent reviewer who is not the head's author has posted `VERDICT=APPROVED` on
   that exact head with no unresolved blocking findings; and the PR does not deploy,
   release, migrate data, touch credentials, secrets, or repository settings, or cause
   external side effects. Green CI alone is not permission to merge.
