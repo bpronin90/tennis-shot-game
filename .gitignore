@@ -29,6 +29,8 @@ __pycache__/
 /.claude/*
 !/.claude/settings.json
 !/.claude/hooks/
+/.claude/hooks/*
+!/.claude/hooks/guard-bash.py
 /.codex/
 /.agents/
 /.agent-workflows/

@@ -15,7 +15,9 @@ anything they do not permit is not permitted.
 Rules that hold in every environment:
 
 - Work on a branch, never on the default branch. Never commit or push to the default
-  branch, and never force-push.
+  branch. Never force-push a shared branch unless the owner explicitly directs it.
+- Never reset, clean, stash away, or overwrite uncommitted work you did not create. If
+  the checkout is dirty, work in a separate worktree.
 - Stage explicit paths only (no `git add -A`, `git add .`, or `git commit -a`).
 - Every PR body contains exactly one standalone `Issue: #<n>` or `Issue: none` line
   and the contract headings from `CONTRIBUTING.md`. Change only the Allowed Files, and
