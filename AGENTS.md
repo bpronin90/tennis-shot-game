@@ -22,9 +22,10 @@ Rules that hold in every environment:
 - Every PR body contains exactly one standalone `Issue: #<n>` or `Issue: none` line
   and the contract headings from `CONTRIBUTING.md`. Change only the Allowed Files, and
   run `bash scripts/check-scope.sh --allowed <path> ...` before handoff.
-- Never merge PRs, close issues, deploy, release, change repository settings or
-  visibility, touch credentials or secrets, or cause external side effects. Only the
-  owner does these, and an ambiguous "looks good" is not authorization.
+- Merge a PR only under the merge conditions in `CONTRIBUTING.md`. Never close issues
+  (other than through a merged PR's `Closes #n`), deploy, release, change repository
+  settings or visibility, touch credentials or secrets, or cause external side effects.
+  Only the owner does these, and an ambiguous "looks good" is not authorization.
 - Do not review or approve a head you produced.
 - Report exactly which checks ran. Never present simulated, skipped, or unexecuted
   validation as proven.

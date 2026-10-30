@@ -46,7 +46,13 @@ If you are unsure whether work is substantive, treat it as substantive.
   is at the owner's discretion.
 - Review findings cite `file:line` and a concrete failing input or state, and separate
   blocking defects from optional suggestions. A new commit makes earlier reviews stale.
-- Only the owner merges or closes issues. Green CI is not permission to merge.
+- An agent may merge a PR only when CI passes on the exact head; for substantive changes,
+  an independent reviewer who is not the head's author has posted `VERDICT=APPROVE` on
+  that exact head with no unresolved blocking findings; and the PR does not deploy,
+  release, migrate data, touch credentials, secrets, or repository settings, or cause
+  external side effects. Green CI alone is not permission to merge.
+- Only the owner merges Dependabot PRs, merges with `--admin`, or closes issues other
+  than through a merged PR's `Closes #n`.
 - Only the owner authorizes deploys and releases; production data, migrations, and
   schedules; credentials, secrets, and access; repository settings and branch
   protection; new paid services; and external side effects. Ambiguous

@@ -74,7 +74,8 @@ for prefix in "git" "git -C $repo" "git -C$repo" "git -c core.pager=cat" "git -c
   expect 2 "$(hook_exit "$prefix clean -fd")" "hook blocks: $prefix clean -fd"
   expect 2 "$(hook_exit "$prefix checkout .")" "hook blocks: $prefix checkout ."
 done
-expect 2 "$(hook_exit "gh pr merge 1")" "hook blocks: gh pr merge"
+expect 0 "$(hook_exit "gh pr merge 1")" "hook allows: gh pr merge"
+expect 2 "$(hook_exit "gh pr merge 1 --admin")" "hook blocks: gh pr merge --admin"
 
 # -C<dir> must resolve the target repo: committing on feature elsewhere is fine,
 # while the same command aimed at a repo on main is blocked.

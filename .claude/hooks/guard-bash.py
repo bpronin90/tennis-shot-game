@@ -5,7 +5,7 @@ stderr to Claude. Enforces AGENTS.md rules that are otherwise instruction-only:
   - no commits on, or pushes to, the default branch
   - no force push, hard reset, git clean, or whole-tree checkout/restore
     (protects existing uncommitted work)
-  - no `gh pr merge` (merge is owner-controlled)
+  - no `gh pr merge --admin` (bypasses checks; owner-only)
 This is a guardrail against agent mistakes, not a security boundary: it does not
 see commands run by other tools, scripts, or other agents.
 """
@@ -107,7 +107,9 @@ for seg in re.split(r"&&|\|\||;|\||\n", cmd):
         workdir = os.path.join(workdir, os.path.expanduser(toks[1]))
     elif toks[0] == "git":
         check_git(toks[1:], workdir)
-    elif toks[0] == "gh" and toks[1:3] == ["pr", "merge"]:
-        block("merging is owner-controlled; the owner merges in GitHub or via `! gh pr merge`")
+    elif toks[0] == "gh" and toks[1:3] == ["pr", "merge"] and any(
+        t == "--admin" or t.startswith("--admin=") for t in toks[3:]
+    ):
+        block("`gh pr merge --admin` bypasses checks and is owner-only; merge without it once the merge conditions hold")
 
 sys.exit(0)
